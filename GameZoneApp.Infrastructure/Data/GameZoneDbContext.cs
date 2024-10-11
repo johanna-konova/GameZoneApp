@@ -31,6 +31,10 @@ namespace GameZoneApp.Infrastructure.Data
                 .Entity<GamersGames>()
                 .HasKey(gg => new { gg.GameId, gg.GamerId });
 
+            builder
+                .Entity<Genre>()
+                .HasData(GenerateGenres());
+
             base.OnModelCreating(builder);
         }
     }
