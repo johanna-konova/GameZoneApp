@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Models.DependencyInjection;
 
 namespace GameZoneApp.Infrastructure.Data
 {
-    public class GameZoneDbContext : IdentityDbContext
+    public class GameZoneDbContext : IdentityDbContext<ApplicationUser,  IdentityRole<Guid>, Guid>
     {
         public GameZoneDbContext(DbContextOptions<GameZoneDbContext> options)
             : base(options)
