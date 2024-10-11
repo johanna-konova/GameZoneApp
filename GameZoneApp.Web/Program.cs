@@ -1,8 +1,8 @@
-using GameZone.Data;
+using GameZoneApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameZone
+namespace GameZoneApp.Web
 {
     public class Program
     {

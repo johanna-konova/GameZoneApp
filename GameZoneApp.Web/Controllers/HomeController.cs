@@ -1,8 +1,8 @@
-﻿using GameZone.Models;
+﻿using GameZoneApp.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace GameZone.Controllers
+namespace GameZoneApp.Web.Controllers
 {
     public class HomeController : Controller
     {
