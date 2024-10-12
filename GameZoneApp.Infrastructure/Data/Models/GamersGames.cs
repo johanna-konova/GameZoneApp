@@ -1,9 +1,11 @@
-﻿using Microsoft.Models.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Models.DependencyInjection;
 
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameZoneApp.Infrastructure.Data.Models
 {
+    [PrimaryKey(nameof(GameId), nameof(GamerId))]
     public class GamersGames
     {
         public Guid GameId { get; init; }

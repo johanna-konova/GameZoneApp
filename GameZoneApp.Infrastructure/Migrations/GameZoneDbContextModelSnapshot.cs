@@ -37,7 +37,11 @@ namespace GameZoneApp.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("PublisherId")
                         .HasColumnType("uniqueidentifier");
@@ -336,7 +340,7 @@ namespace GameZoneApp.Infrastructure.Migrations
                     b.HasOne("Microsoft.Models.DependencyInjection.ApplicationUser", "Publisher")
                         .WithMany()
                         .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Genre");

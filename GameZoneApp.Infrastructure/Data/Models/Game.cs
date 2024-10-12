@@ -1,6 +1,7 @@
 ﻿using Microsoft.Models.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using static GameZoneApp.Infrastructure.Data.DataConstants.Game;
 
 namespace GameZoneApp.Infrastructure.Data.Models
@@ -18,9 +19,12 @@ namespace GameZoneApp.Infrastructure.Data.Models
         [StringLength(DescriptionMaxLength)]
         public string Description { get; init; } = string.Empty;
 
+        [StringLength(ImageUrlMaxLength)]
         public string? ImageUrl { get; init; } = null;
 
         public DateTime ReleasedOn { get; init; }
+
+        public bool IsDeleted { get; init; }
 
         public Guid PublisherId { get; init; }
 
@@ -34,6 +38,6 @@ namespace GameZoneApp.Infrastructure.Data.Models
         [ForeignKey(nameof(GenreId))]
         public Genre Genre { get; init; } = null!;
 
-        public IEnumerable<GamersGames> GamerGame = new HashSet<GamersGames>();
+        public IEnumerable<GamersGames> GamersGames = new HashSet<GamersGames>();
     }
 }

@@ -25,11 +25,7 @@ namespace GameZoneApp.Infrastructure.Data
                 .Entity<Game>()
                 .HasOne(g => g.Publisher)
                 .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<GamersGames>()
-                .HasKey(gg => new { gg.GameId, gg.GamerId });
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder
                 .Entity<Genre>()

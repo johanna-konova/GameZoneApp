@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameZoneApp.Infrastructure.Migrations
 {
     [DbContext(typeof(GameZoneDbContext))]
-    [Migration("20241011140333_InitializeDatabase")]
-    partial class InitializeDatabase
+    [Migration("20241012081415_InitializeDatabaseAndSeedGenreTable")]
+    partial class InitializeDatabaseAndSeedGenreTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,11 @@ namespace GameZoneApp.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("PublisherId")
                         .HasColumnType("uniqueidentifier");
@@ -93,6 +97,38 @@ namespace GameZoneApp.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Genres");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Action"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Adventure"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Fighting"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Sports"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Racing"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Strategy"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -307,7 +343,7 @@ namespace GameZoneApp.Infrastructure.Migrations
                     b.HasOne("Microsoft.Models.DependencyInjection.ApplicationUser", "Publisher")
                         .WithMany()
                         .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Genre");
