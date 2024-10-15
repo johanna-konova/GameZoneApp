@@ -24,7 +24,7 @@ namespace GameZoneApp.Infrastructure.Data.Models
 
         public DateTime ReleasedOn { get; set; }
 
-        public bool IsDeleted { get; init; }
+        public bool IsDeleted { get; set; }
 
         public Guid PublisherId { get; init; }
 

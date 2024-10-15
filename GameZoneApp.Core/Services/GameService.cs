@@ -37,6 +37,37 @@ namespace GameZoneApp.Core.Services
                 })
                 .ToListAsync();
 
+        public async Task<IEnumerable<GameViewModel>> GetByUserIdAsync(Guid userId)
+            => await repository
+                .AllAsNoTracking<GamersGames>()
+                .Where(gg => gg.Game.IsDeleted == false && gg.GamerId == userId)
+                .Select(gg => new GameViewModel()
+                {
+                    Id = gg.Game.Id,
+                    Title = gg.Game.Title,
+                    ImageUrl = gg.Game.ImageUrl,
+                    Genre = gg.Game.Genre.Name,
+                    ReleasedOn = gg.Game.ReleasedOn.ToString(ReleasedOnDateTimeFormat),
+                    Publisher = gg.Game.Publisher.Email!,
+                })
+                .ToListAsync();
+
+        public async Task<GameDetailsViewModel?> GetDetailsAsync(Guid id)
+            => await repository
+                .AllAsNoTracking<Game>()
+                .Where(g => g.Id == id && g.IsDeleted == false)
+                .Select(g => new GameDetailsViewModel()
+                {
+                    Id = g.Id,
+                    Title = g.Title,
+                    ImageUrl = g.ImageUrl,
+                    Description = g.Description,
+                    ReleasedOn = g.ReleasedOn.ToString(ReleasedOnDateTimeFormat),
+                    Genre = g.Genre.Name,
+                    Publisher = g.Publisher.Email!,
+                })
+                .FirstOrDefaultAsync();
+
         public async Task<GameFormModel?> AssembleGameFormModelAsync(Guid id)
         {
             var game = await repository
@@ -59,6 +90,18 @@ namespace GameZoneApp.Core.Services
 
             return game;
         }
+
+        public async Task<GameDeleteViewModel?> GetDetailsForDeleteFormAsync(Guid id)
+            => await repository
+                .AllAsNoTracking<Game>()
+                .Where(g => g.Id == id && g.IsDeleted == false)
+                .Select(g => new GameDeleteViewModel()
+                {
+                    Id = g.Id,
+                    Title = g.Title,
+                    Publisher = g.Publisher.Email!,
+                })
+                .FirstOrDefaultAsync();
 
         public async Task<bool> ExistsById(Guid id)
             => await repository
@@ -103,6 +146,49 @@ namespace GameZoneApp.Core.Services
             gameToEdit.GenreId = model.GenreId;
 
             await repository.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var gameToDelete = await repository.GetByIdAsync<Game>(id);
+
+            gameToDelete!.IsDeleted = true;
+
+            await repository.SaveChangesAsync();
+        }
+
+        public async Task AddToZoneAsync(Guid gameId, Guid userId)
+        {
+            var gamerGame = await repository
+                .AllAsNoTracking<GamersGames>()
+                .Where(gg => gg.GameId == gameId && gg.GamerId == userId)
+                .FirstOrDefaultAsync();
+
+            if (gamerGame == null)
+            {
+                gamerGame = new GamersGames()
+                {
+                    GameId = gameId,
+                    GamerId = userId,
+                };
+
+                await repository.AddAsync<GamersGames>(gamerGame);
+                await repository.SaveChangesAsync();
+            }
+        }
+
+        public async Task StrikeOutAsync(Guid gameId, Guid userId)
+        {
+            var gamerGame = repository
+                .AllAsNoTracking<GamersGames>()
+                .Where(gg => gg.GameId == gameId && gg.GamerId == userId)
+                .FirstOrDefault();
+
+            if (gamerGame != null)
+            {
+                repository.Remove(gamerGame);
+                await repository.SaveChangesAsync();
+            }
         }
     }
 }

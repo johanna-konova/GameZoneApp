@@ -7,7 +7,7 @@ using static GameZoneApp.Core.Constants.MessageConstants;
 using static GameZoneApp.Core.Constants.MessageTypes;
 using static GameZoneApp.Web.Attributes.Common.CommonFunctionalities;
 
-namespace HouseRentingSystem.Web.Attributes
+namespace GameZoneApp.Web.Attributes
 {
     public class ExistingGameAttribute : ActionFilterAttribute
     {

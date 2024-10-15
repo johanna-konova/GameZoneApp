@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Globalization;
 using static GameZoneApp.Infrastructure.Data.DataConstants.Game;
+using static GameZoneApp.Core.Constants.MessageConstants;
+using static GameZoneApp.Core.Constants.MessageTypes;
 using static GameZoneApp.Core.Constants.ModelsMessagesConstants;
 using System.Security.Claims;
-using HouseRentingSystem.Web.Attributes;
 using GameZoneApp.Web.Attributes;
+using Microsoft.CodeAnalysis.Differencing;
 
 namespace GameZoneApp.Web.Controllers
 {
@@ -31,6 +33,21 @@ namespace GameZoneApp.Web.Controllers
             var games = await gameService.GetAllAsync();
 
             return View(games);
+        }
+
+        public async Task<IActionResult> MyZone()
+        {
+            var gamesByGamerId = await gameService.GetByUserIdAsync(User.Id());
+
+            return View(gamesByGamerId);
+        }
+
+        [ExistingGame]
+        public async Task<IActionResult> Details(string id)
+        {
+            var game = await gameService.GetDetailsAsync(Guid.Parse(id));
+
+            return View(game);
         }
 
         public async Task<IActionResult> Add()
@@ -68,6 +85,8 @@ namespace GameZoneApp.Web.Controllers
             };
 
             await gameService.AddAsync(model, User.Id());
+
+            TempData[SuccessMessage] = SuccessfullyAddedGame;
 
             return RedirectToAction(nameof(All));
         }
@@ -107,7 +126,50 @@ namespace GameZoneApp.Web.Controllers
 
             await gameService.EditAsync(Guid.Parse(id), model);
 
+            TempData[SuccessMessage] = SuccessfullyEditedGame;
+
             return RedirectToAction(nameof(All));
+        }
+
+        [ExistingGame]
+        [Creator]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var gameToDelete = await gameService.GetDetailsForDeleteFormAsync(Guid.Parse(id));
+
+            return View(gameToDelete);
+        }
+
+        [ExistingGame]
+        [Creator]
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(GameDeleteViewModel model)
+        {
+            await gameService.DeleteAsync(model.Id);
+
+            TempData[SuccessMessage] = SuccessfullyDeletedGame;
+
+            return RedirectToAction(nameof(MyZone));
+        }
+
+        [ExistingGame]
+        public async Task<IActionResult> AddToMyZone(string id)
+        {
+            await gameService.AddToZoneAsync(Guid.Parse(id), User.Id());
+
+            TempData[SuccessMessage] = SuccessfullyAddedGameToMyZone;
+
+            return RedirectToAction(nameof(MyZone));
+        }
+
+        [ExistingGame]
+        public async Task<IActionResult> StrikeOut(string id)
+        {
+            await gameService.StrikeOutAsync(Guid.Parse(id), User.Id());
+
+            TempData[SuccessMessage] = SuccessfullyStrikeOutGame;
+
+            return RedirectToAction(nameof(MyZone));
         }
     }
 }
