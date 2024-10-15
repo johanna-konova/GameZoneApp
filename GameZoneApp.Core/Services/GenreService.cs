@@ -25,5 +25,10 @@ namespace GameZoneApp.Core.Services
                     Name = g.Name,
                 })
                 .ToListAsync();
+
+        public async Task<bool> ExistsByIdAsync(int id)
+            => await repository
+                .AllAsNoTracking<Genre>()
+                .AnyAsync(g => g.Id == id);
     }
 }

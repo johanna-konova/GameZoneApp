@@ -7,6 +7,7 @@
         public const string MismatchedPasswords = "The password and confirmation password do not match.";
         public const string InvalidStringLength = "The {0} must be between {2} and {1} characters long.";
         public const string InvalidUrlFormat = "The {0} is not valid URL format.";
+        public const string InvalidDateTimeFormat = "The released date is not valid format. It must be in '{0}' format.";
         public const string NonExistentGenre = "The genre does not exist.";
     }
 }

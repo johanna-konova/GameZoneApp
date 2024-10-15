@@ -27,7 +27,7 @@ namespace GameZoneApp.Core.Models.Game
 
         public int GenreId { get; init; }
 
-        public IEnumerable<GameGenreOptionModel> Genres { get; init; }
+        public IEnumerable<GameGenreOptionModel> Genres { get; set; }
             = new HashSet<GameGenreOptionModel>();
     }
 }
