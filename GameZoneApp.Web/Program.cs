@@ -9,6 +9,7 @@ namespace GameZoneApp.Web
             // Add services to the container.
             builder.Services.AddApplicationDbContext(builder.Configuration);
             builder.Services.AddApplicationIdentity(builder.Configuration);
+            builder.Services.AddApplicationServices();
 
             builder.Services.AddControllersWithViews();
 
