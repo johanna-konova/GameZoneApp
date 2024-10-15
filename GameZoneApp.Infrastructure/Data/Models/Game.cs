@@ -13,16 +13,16 @@ namespace GameZoneApp.Infrastructure.Data.Models
 
         [Required]
         [StringLength(TitleMaxLength)]
-        public string Title { get; init; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
 
         [Required]
         [StringLength(DescriptionMaxLength)]
-        public string Description { get; init; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
         [StringLength(ImageUrlMaxLength)]
-        public string? ImageUrl { get; init; } = null;
+        public string? ImageUrl { get; set; } = null;
 
-        public DateTime ReleasedOn { get; init; }
+        public DateTime ReleasedOn { get; set; }
 
         public bool IsDeleted { get; init; }
 
@@ -32,7 +32,7 @@ namespace GameZoneApp.Infrastructure.Data.Models
         [ForeignKey(nameof(PublisherId))]
         public ApplicationUser Publisher { get; init; } = null!;
 
-        public int GenreId { get; init; }
+        public int GenreId { get; set; }
 
         [Required]
         [ForeignKey(nameof(GenreId))]
