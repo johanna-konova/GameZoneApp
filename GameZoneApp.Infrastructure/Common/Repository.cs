@@ -29,5 +29,8 @@ namespace GameZoneApp.Infrastructure.Common
 
         public async Task<int> SaveChangesAsync()
             => await context.SaveChangesAsync();
+
+        public void Remove<T>(T entity) where T : class
+            => context.Remove(entity);
     }
 }
